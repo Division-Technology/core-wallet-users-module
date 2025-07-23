@@ -39,13 +39,12 @@ public class UsersGrpcService : UsersService.UsersServiceBase
             LastName = request.LastName,
             Language = request.Language,
             PhoneNumber = request.PhoneNumber,
-            Referrer = !string.IsNullOrEmpty(request.Referrer) ? Guid.Parse(request.Referrer) : null,
             RegistrationStatus = RegistrationStatus.Unregistered, // or map from request if available
-            IsBlock = request.IsBlock,
-            IsAdmin = request.IsAdmin,
-            IsSuspicious = request.IsSuspicious,
-            IsPremium = request.IsPremium,
+            IsBlocked = request.IsBlocked,
             HasVehicle = request.HasVehicle,
+            TelegramId = !string.IsNullOrEmpty(request.TelegramId) ? long.Parse(request.TelegramId) : null,
+            ChatId = !string.IsNullOrEmpty(request.ChatId) ? long.Parse(request.ChatId) : null,
+            Username = request.Username,
         };
         var result = await this.mediator.Send(command);
         var user = await this.usersRepository.GetByIdAsync(result.Id);
@@ -120,8 +119,8 @@ public class UsersGrpcService : UsersService.UsersServiceBase
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 PhoneNumber = u.PhoneNumber ?? string.Empty,
-                IsBlock = u.IsBlock,
-                IsAdmin = u.IsAdmin,
+                IsBlocked = u.IsBlock,
+                HasVehicle = u.HasVehicle,
                 CreatedAt = u.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
 
                 // Only map available properties
@@ -141,10 +140,7 @@ public class UsersGrpcService : UsersService.UsersServiceBase
             LastName = request.LastName,
             Language = request.Language,
             PhoneNumber = request.PhoneNumber,
-            IsBlock = request.IsBlocked, // Map is_blocked to IsBlock
-            IsAdmin = request.IsAdmin,
-            IsSuspicious = request.IsSuspicious,
-            IsPremium = request.IsPremium,
+            IsBlocked = request.IsBlocked, // Map is_blocked to IsBlock
             HasVehicle = request.HasVehicle,
         };
         var result = await this.mediator.Send(command);
@@ -168,12 +164,7 @@ public class UsersGrpcService : UsersService.UsersServiceBase
             Username = string.Empty, // not present in User entity
             Language = user.Language ?? string.Empty,
             PhoneNumber = user.PhoneNumber ?? string.Empty,
-            Referrer = string.Empty, // string
             IsBlocked = false,
-            IsBlock = user.IsBlock,
-            IsAdmin = user.IsAdmin,
-            IsSuspicious = user.IsSuspicious,
-            IsPremium = user.IsPremium,
             HasVehicle = user.HasVehicle,
             CreatedAt = user.CreatedAt != null ? user.CreatedAt.ToString("O") : string.Empty,
             ModifiedAt = user.ModifiedAt != null ? user.ModifiedAt.ToString("O") : string.Empty,

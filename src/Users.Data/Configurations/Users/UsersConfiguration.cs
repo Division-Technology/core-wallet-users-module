@@ -20,20 +20,17 @@ public class UsersConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Language).HasMaxLength(10);
         builder.Property(x => x.PhoneNumber).HasMaxLength(20);
         builder.Property(x => x.RegistrationStatus).HasConversion<int>().HasDefaultValue(RegistrationStatus.Unregistered);
-        builder.Property(x => x.IsBlock).HasDefaultValue(false);
-        builder.Property(x => x.IsAdmin).HasDefaultValue(false);
-        builder.Property(x => x.IsSuspicious).HasDefaultValue(false);
-        builder.Property(x => x.IsPremium).HasDefaultValue(false);
+        builder.Property(x => x.IsBlocked).HasDefaultValue(false);
         builder.Property(x => x.HasVehicle).HasDefaultValue(false);
+        builder.Property(x => x.TelegramId);
+        builder.Property(x => x.ChatId);
+        builder.Property(x => x.Username).HasMaxLength(100);
         builder.Property(x => x.CreatedAt).HasDefaultValueSql("now()");
         builder.Property(x => x.ModifiedAt).HasDefaultValueSql("now()");
         builder.HasIndex(x => x.PhoneNumber).HasDatabaseName("idx_users_phone_number");
-        builder.HasIndex(x => x.Referrer).HasDatabaseName("idx_users_referrer");
         builder.HasIndex(x => x.RegistrationStatus).HasDatabaseName("idx_users_registration_status");
-        builder.HasIndex(x => x.IsBlock).HasDatabaseName("idx_users_block");
-        builder.HasOne<User>()
-            .WithMany()
-            .HasForeignKey(x => x.Referrer)
-            .OnDelete(DeleteBehavior.NoAction);
+        builder.HasIndex(x => x.IsBlocked).HasDatabaseName("idx_users_block");
+        builder.HasIndex(x => x.TelegramId).HasDatabaseName("idx_users_telegram_id");
+        builder.HasIndex(x => x.ChatId).HasDatabaseName("idx_users_chat_id");
     }
 }

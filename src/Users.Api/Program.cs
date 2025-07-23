@@ -63,12 +63,10 @@ builder.Services.AddMediatR(cfg =>
 
 // Register Users and UserClients Installments
 builder.InstallUsers();
-builder.InstallUserClients();
 
 // Register AutoMapper profiles for both Users and UserClients
 builder.Services.AddAutoMapper(
-    typeof(Users.Application.Mappings.Users.UserProfile).Assembly,
-    typeof(Users.Application.Mappings.UserClients.UserClientProfile).Assembly);
+    typeof(Users.Application.Mappings.Users.UserProfile).Assembly);
 
 // builder.InstallCommon();
 // builder.InstallUsers();
@@ -113,7 +111,6 @@ app.UseHttpsRedirection();
 
 // --- Map Endpoints ---
 app.MapGrpcService<UsersGrpcService>().EnableGrpcWeb();
-app.MapGrpcService<UserClientsGrpcService>().EnableGrpcWeb();
 app.MapControllers();
 app.MapHealthChecks("/health");
 

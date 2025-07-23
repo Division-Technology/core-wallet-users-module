@@ -31,5 +31,7 @@ public class UserListItemDto
 
     public bool IsAdmin { get; set; }
 
+    public bool HasVehicle { get; set; }
+
     public DateTime CreatedAt { get; set; }
 }

@@ -43,15 +43,15 @@ public class PatchUpdateUserCommandHandler : IRequestHandler<PatchUpdateUserComm
             hasChanges = true; }
         if (request.RegistrationStatus.HasValue && request.RegistrationStatus.Value != user.RegistrationStatus) { user.RegistrationStatus = request.RegistrationStatus.Value;
             hasChanges = true; }
-        if (request.IsBlock.HasValue && request.IsBlock.Value != user.IsBlock) { user.IsBlock = request.IsBlock.Value;
-            hasChanges = true; }
-        if (request.IsAdmin.HasValue && request.IsAdmin.Value != user.IsAdmin) { user.IsAdmin = request.IsAdmin.Value;
-            hasChanges = true; }
-        if (request.IsSuspicious.HasValue && request.IsSuspicious.Value != user.IsSuspicious) { user.IsSuspicious = request.IsSuspicious.Value;
-            hasChanges = true; }
-        if (request.IsPremium.HasValue && request.IsPremium.Value != user.IsPremium) { user.IsPremium = request.IsPremium.Value;
+        if (request.IsBlocked.HasValue && request.IsBlocked.Value != user.IsBlocked) { user.IsBlocked = request.IsBlocked.Value;
             hasChanges = true; }
         if (request.HasVehicle.HasValue && request.HasVehicle.Value != user.HasVehicle) { user.HasVehicle = request.HasVehicle.Value;
+            hasChanges = true; }
+        if (request.TelegramId.HasValue && request.TelegramId.Value != user.TelegramId) { user.TelegramId = request.TelegramId.Value;
+            hasChanges = true; }
+        if (request.ChatId.HasValue && request.ChatId.Value != user.ChatId) { user.ChatId = request.ChatId.Value;
+            hasChanges = true; }
+        if (request.Username != null && request.Username != user.Username) { user.Username = request.Username;
             hasChanges = true; }
         if (hasChanges)
         {
@@ -66,7 +66,7 @@ public class PatchUpdateUserCommandHandler : IRequestHandler<PatchUpdateUserComm
         };
     }
 
-    private object ConvertValue(PropertyInfo propertyInfo, JsonElement jsonElement)
+    private object? ConvertValue(PropertyInfo propertyInfo, JsonElement jsonElement)
     {
         return propertyInfo.PropertyType switch
         {

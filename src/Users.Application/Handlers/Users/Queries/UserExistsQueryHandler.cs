@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Users.Domain.Entities.Users.Queries.Exists;
-using Users.Repositories.UserClients;
 using Users.Repositories.Users;
 
 namespace Users.Application.Handlers.Users.Queries;
@@ -17,12 +16,10 @@ namespace Users.Application.Handlers.Users.Queries;
 public class UserExistsQueryHandler : IRequestHandler<UserExistsQuery, UserExistsQueryResponse>
 {
     private readonly IUsersRepository repository;
-    private readonly IUserClientsRepository clientsRepository;
 
-    public UserExistsQueryHandler(IUsersRepository repository, IUserClientsRepository clientsRepository)
+    public UserExistsQueryHandler(IUsersRepository repository)
     {
         this.repository = repository;
-        this.clientsRepository = clientsRepository;
     }
 
     /// <inheritdoc/>
@@ -41,11 +38,11 @@ public class UserExistsQueryHandler : IRequestHandler<UserExistsQuery, UserExist
             }
         }
 
-        // Check by TelegramId (via UserClients)
+        // Check by TelegramId (now on User)
         if (!string.IsNullOrEmpty(request.TelegramId))
         {
-            var client = await this.clientsRepository.GetByTelegramIdAsync(request.TelegramId, cancellationToken);
-            if (client != null)
+            var user = await this.repository.GetAsync(x => x.TelegramId.ToString() == request.TelegramId, cancellationToken);
+            if (user != null)
             {
                 return new UserExistsQueryResponse { Exists = true, FoundBy = "TelegramId" };
             }
@@ -66,12 +63,11 @@ public class UserExistsQueryHandler : IRequestHandler<UserExistsQuery, UserExist
             }
         }
 
-        // Check by ChatId (via UserClients)
+        // Check by ChatId (now on User)
         if (!string.IsNullOrEmpty(request.ChatId))
         {
-            var client = (await this.clientsRepository.GetAllAsync(cancellationToken))
-                .FirstOrDefault(c => c.ChatId == request.ChatId);
-            if (client != null)
+            var user = await this.repository.GetAsync(x => x.ChatId.ToString() == request.ChatId, cancellationToken);
+            if (user != null)
             {
                 return new UserExistsQueryResponse { Exists = true, FoundBy = "ChatId" };
             }

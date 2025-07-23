@@ -4,7 +4,6 @@
 
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Users.Data.Configurations.UserClients;
 using Users.Data.Configurations.Users;
 using Users.Data.Tables;
 
@@ -13,8 +12,6 @@ namespace Users.Data;
 public class UsersDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
-
-    public DbSet<UserClient> UserClients { get; set; }
 
     public UsersDbContext()
     {
@@ -31,7 +28,6 @@ public class UsersDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfiguration(new UsersConfiguration());
-        modelBuilder.ApplyConfiguration(new UserClientConfiguration());
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {

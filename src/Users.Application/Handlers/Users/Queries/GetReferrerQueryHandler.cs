@@ -23,20 +23,9 @@ public class GetReferrerQueryHandler : IRequestHandler<GetReferrerQuery, GetRefe
     /// <inheritdoc/>
     public async Task<GetReferrerQueryResponse> Handle(GetReferrerQuery request, CancellationToken cancellationToken)
     {
+        // Referrer property has been removed from User. Always return empty response or throw.
         var user = await this.repository.GetAsync(x => x.Id == request.UserId, cancellationToken)
             ?? throw new NotFoundException($"User {request.UserId} not found.");
-        if (user.Referrer == null)
-        {
-            return new GetReferrerQueryResponse();
-        }
-
-        var referrer = await this.repository.GetAsync(x => x.Id == user.Referrer.Value, cancellationToken);
-        return new GetReferrerQueryResponse
-        {
-            ReferrerId = referrer?.Id,
-            ReferrerFirstName = referrer?.FirstName,
-            ReferrerLastName = referrer?.LastName,
-            ReferrerPhoneNumber = referrer?.PhoneNumber,
-        };
+        return new GetReferrerQueryResponse();
     }
 }

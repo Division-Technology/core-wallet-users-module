@@ -19,19 +19,16 @@ public class User : BaseEntity
 
     public string? PhoneNumber { get; set; }
 
-    public Guid? Referrer { get; set; } // FK to User.Id
-
     public RegistrationStatus RegistrationStatus { get; set; } // Profile completion state
 
-    public bool IsBlock { get; set; } // Admin-initiated block
-
-    public bool IsAdmin { get; set; }
-
-    public bool IsSuspicious { get; set; }
-
-    public bool IsPremium { get; set; }
+    public bool IsBlocked { get; set; } // Admin-initiated block (renamed from IsBlock)
 
     public bool HasVehicle { get; set; }
+
+    // Telegram-related fields
+    public long? TelegramId { get; set; }
+    public long? ChatId { get; set; }
+    public string? Username { get; set; }
 
     // created_at and updated_at are inherited from BaseEntity as CreatedAt and ModifiedAt
 }

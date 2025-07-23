@@ -16,6 +16,10 @@ public class CreateUserCommandRequestValidator : AbstractValidator<CreateUserCom
         this.RuleFor(x => x.PhoneNumber).NotEmpty().Matches(@"^\+?[1-9]\d{1,14}$");
         this.RuleFor(x => x.Language).MaximumLength(10).When(x => x.Language != null);
 
+        this.RuleFor(x => x.TelegramId).GreaterThan(0).When(x => x.TelegramId.HasValue);
+        this.RuleFor(x => x.ChatId).GreaterThan(0).When(x => x.ChatId.HasValue);
+        this.RuleFor(x => x.Username).MaximumLength(100).When(x => !string.IsNullOrEmpty(x.Username));
+
         // Add more rules as needed
     }
 }
