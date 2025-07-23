@@ -28,24 +28,14 @@ public class PatchUpdateUserClientCommandHandler : IRequestHandler<PatchUpdateUs
         var hasChanges = false;
         if (request.IsActive.HasValue && request.IsActive.Value != client.IsActive) { client.IsActive = request.IsActive.Value;
             hasChanges = true; }
-        if (request.IsBlocked.HasValue)
-        { /* update ClientData JSON for is_blocked */
-            hasChanges = true;
-        }
         if (request.LastSeenAt.HasValue) { client.LastSeenAt = request.LastSeenAt.Value;
             hasChanges = true; }
-        if (request.Platform != null)
-        { /* update ClientData JSON for platform */
-            hasChanges = true;
-        }
-        if (request.Language != null)
-        { /* update ClientData JSON for language */
-            hasChanges = true;
-        }
-        if (request.Version != null)
-        { /* update ClientData JSON for version */
-            hasChanges = true;
-        }
+        if (request.Platform != null) { client.Platform = request.Platform;
+            hasChanges = true; }
+        if (request.Language != null) { client.Language = request.Language;
+            hasChanges = true; }
+        if (request.Version != null) { client.Version = request.Version;
+            hasChanges = true; }
         if (hasChanges)
         {
             this.repository.Update(client);

@@ -14,13 +14,15 @@ public class UserClient
 
     public Guid UserId { get; set; } // FK to User
 
-    public ClientType Type { get; set; } // Type of client (Telegram, MobileApp, etc.)
-
-    public string? ClientData { get; set; } // Flexible storage for type-specific data
-
-    public DateTime CreatedAt { get; set; } // First seen time
-
-    public DateTime? LastSeenAt { get; set; } // Most recent activity
-
-    public bool IsActive { get; set; } // Soft session activity flag
+    public ChannelType ChannelType { get; set; }
+    public string? TelegramId { get; set; }
+    public string? ChatId { get; set; }
+    public string? DeviceToken { get; set; }
+    public string? SessionId { get; set; }
+    public string? Platform { get; set; }
+    public string? Version { get; set; }
+    public string? Language { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? LastSeenAt { get; set; }
 }

@@ -33,27 +33,12 @@ public class UserClientsRepository : IUserClientsRepository
         => await this.dbContext.UserClients.Where(x => x.UserId == userId).ToListAsync(cancellationToken);
 
     /// <inheritdoc/>
-    public async Task<UserClient?> GetByUserIdAndTypeAsync(Guid userId, ClientType type, CancellationToken cancellationToken = default)
-        => await this.dbContext.UserClients.FirstOrDefaultAsync(x => x.UserId == userId && x.Type == type, cancellationToken);
+    public async Task<UserClient?> GetByUserIdAndTypeAsync(Guid userId, ChannelType type, CancellationToken cancellationToken = default)
+        => await this.dbContext.UserClients.FirstOrDefaultAsync(x => x.UserId == userId && x.ChannelType == type, cancellationToken);
 
     /// <inheritdoc/>
     public async Task<UserClient?> GetByTelegramIdAsync(string telegramId, CancellationToken cancellationToken = default)
-    {
-        var clients = await this.dbContext.UserClients.ToListAsync(cancellationToken);
-        foreach (var x in clients)
-        {
-            if (x.ClientData != null)
-            {
-                using var doc = JsonDocument.Parse(x.ClientData);
-                if (doc.RootElement.TryGetProperty("telegramId", out var tid) && tid.GetString() == telegramId)
-                {
-                    return x;
-                }
-            }
-        }
-
-        return null;
-    }
+        => await this.dbContext.UserClients.FirstOrDefaultAsync(x => x.TelegramId == telegramId, cancellationToken);
 
     /// <inheritdoc/>
     public async Task AddAsync(UserClient userClient, CancellationToken cancellationToken = default)
@@ -79,6 +64,4 @@ public class UserClientsRepository : IUserClientsRepository
     {
         return await this.dbContext.UserClients.ToListAsync(cancellationToken);
     }
-
-    // Add more flexible query methods as needed
 }

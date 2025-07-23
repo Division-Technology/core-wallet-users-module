@@ -30,22 +30,31 @@ public class UserClientsGrpcService : UserClientsService.UserClientsServiceBase
         var command = new CreateUserClientCommand
         {
             UserId = Guid.Parse(request.UserId),
-
-            // Map other fields as needed
+            ChannelType = (Users.Domain.Enums.ChannelType)request.ChannelType,
+            TelegramId = request.TelegramId,
+            ChatId = request.ChatId,
+            DeviceToken = request.DeviceToken,
+            SessionId = request.SessionId,
+            Platform = request.Platform,
+            Version = request.Version,
+            Language = request.Language
         };
         var result = await this.mediator.Send(command);
         return new UserClientResponse
         {
             Id = result.Id.ToString(),
             UserId = request.UserId,
-            ClientId = request.ClientId,
-            DeviceId = request.DeviceId,
+            ChannelType = request.ChannelType,
+            TelegramId = request.TelegramId,
+            ChatId = request.ChatId,
+            DeviceToken = request.DeviceToken,
+            SessionId = request.SessionId,
             Platform = request.Platform,
-            Language = request.Language,
             Version = request.Version,
-            CreatedAt = result.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-            LastSeenAt = result.LastSeenAt != null ? result.LastSeenAt.Value.ToString("yyyy-MM-ddTHH:mm:ssZ") : string.Empty,
+            Language = request.Language,
             IsActive = true, // or map from result if available
+            CreatedAt = result.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+            LastSeenAt = result.LastSeenAt != null ? result.LastSeenAt.Value.ToString("yyyy-MM-ddTHH:mm:ssZ") : string.Empty
         };
     }
 
@@ -75,14 +84,17 @@ public class UserClientsGrpcService : UserClientsService.UserClientsServiceBase
         {
             Id = result.Id.ToString(),
             UserId = result.UserId.ToString(),
-            ClientId = result.ClientId,
-            DeviceId = result.DeviceId,
-            Platform = result.Platform,
-            Language = result.Language ?? string.Empty,
+            ChannelType = (Api.Grpc.ChannelType)result.ChannelType,
+            TelegramId = result.TelegramId ?? string.Empty,
+            ChatId = result.ChatId ?? string.Empty,
+            DeviceToken = result.DeviceToken ?? string.Empty,
+            SessionId = result.SessionId ?? string.Empty,
+            Platform = result.Platform ?? string.Empty,
             Version = result.Version ?? string.Empty,
-            CreatedAt = result.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-            LastSeenAt = result.LastSeenAt?.ToString("yyyy-MM-ddTHH:mm:ssZ") ?? string.Empty,
+            Language = result.Language ?? string.Empty,
             IsActive = result.IsActive,
+            CreatedAt = result.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+            LastSeenAt = result.LastSeenAt?.ToString("yyyy-MM-ddTHH:mm:ssZ") ?? string.Empty
         };
     }
 
@@ -95,14 +107,17 @@ public class UserClientsGrpcService : UserClientsService.UserClientsServiceBase
         {
             Id = result.Id.ToString(),
             UserId = result.UserId.ToString(),
-            ClientId = string.Empty,
-            DeviceId = string.Empty,
-            Platform = string.Empty,
-            Language = string.Empty,
-            Version = string.Empty,
-            CreatedAt = result.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-            LastSeenAt = result.LastSeenAt?.ToString("yyyy-MM-ddTHH:mm:ssZ") ?? string.Empty,
+            ChannelType = (Api.Grpc.ChannelType)result.ChannelType,
+            TelegramId = result.TelegramId ?? string.Empty,
+            ChatId = result.ChatId ?? string.Empty,
+            DeviceToken = result.DeviceToken ?? string.Empty,
+            SessionId = result.SessionId ?? string.Empty,
+            Platform = result.Platform ?? string.Empty,
+            Version = result.Version ?? string.Empty,
+            Language = result.Language ?? string.Empty,
             IsActive = result.IsActive,
+            CreatedAt = result.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+            LastSeenAt = result.LastSeenAt?.ToString("yyyy-MM-ddTHH:mm:ssZ") ?? string.Empty
         };
     }
 
@@ -118,17 +133,19 @@ public class UserClientsGrpcService : UserClientsService.UserClientsServiceBase
             {
                 Id = c.Id.ToString(),
                 UserId = request.UserId,
-                ClientId = c.Type,
-                DeviceId = string.Empty,
-                Platform = c.Type,
-                Language = string.Empty,
-                Version = string.Empty,
-                CreatedAt = c.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                LastSeenAt = c.LastSeenAt?.ToString("yyyy-MM-ddTHH:mm:ssZ") ?? string.Empty,
+                ChannelType = (Api.Grpc.ChannelType)c.ChannelType,
+                TelegramId = c.TelegramId ?? string.Empty,
+                ChatId = c.ChatId ?? string.Empty,
+                DeviceToken = c.DeviceToken ?? string.Empty,
+                SessionId = c.SessionId ?? string.Empty,
+                Platform = c.Platform ?? string.Empty,
+                Version = c.Version ?? string.Empty,
+                Language = c.Language ?? string.Empty,
                 IsActive = c.IsActive,
+                CreatedAt = c.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                LastSeenAt = c.LastSeenAt?.ToString("yyyy-MM-ddTHH:mm:ssZ") ?? string.Empty
             });
         }
-
         return response;
     }
 
@@ -144,17 +161,19 @@ public class UserClientsGrpcService : UserClientsService.UserClientsServiceBase
             {
                 Id = c.Id.ToString(),
                 UserId = request.UserId,
-                ClientId = c.Type,
-                DeviceId = string.Empty,
-                Platform = c.Type,
-                Language = string.Empty,
-                Version = string.Empty,
-                CreatedAt = c.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                LastSeenAt = c.LastSeenAt?.ToString("yyyy-MM-ddTHH:mm:ssZ") ?? string.Empty,
+                ChannelType = (Api.Grpc.ChannelType)c.ChannelType,
+                TelegramId = c.TelegramId ?? string.Empty,
+                ChatId = c.ChatId ?? string.Empty,
+                DeviceToken = c.DeviceToken ?? string.Empty,
+                SessionId = c.SessionId ?? string.Empty,
+                Platform = c.Platform ?? string.Empty,
+                Version = c.Version ?? string.Empty,
+                Language = c.Language ?? string.Empty,
                 IsActive = c.IsActive,
+                CreatedAt = c.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                LastSeenAt = c.LastSeenAt?.ToString("yyyy-MM-ddTHH:mm:ssZ") ?? string.Empty
             });
         }
-
         return response;
     }
 
@@ -170,6 +189,10 @@ public class UserClientsGrpcService : UserClientsService.UserClientsServiceBase
             Language = request.Language,
             Version = request.Version,
             LastSeenAt = DateTime.TryParse(request.LastSeenAt, out var dt) ? dt : (DateTime?)null,
+            TelegramId = request.TelegramId,
+            ChatId = request.ChatId,
+            DeviceToken = request.DeviceToken,
+            SessionId = request.SessionId
         };
         var result = await this.mediator.Send(command);
         return new UserClientSuccessResponse

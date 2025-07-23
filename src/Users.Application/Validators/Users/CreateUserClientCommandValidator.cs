@@ -12,9 +12,20 @@ public class CreateUserClientCommandValidator : AbstractValidator<CreateUserClie
     public CreateUserClientCommandValidator()
     {
         this.RuleFor(x => x.UserId).NotEmpty();
-        this.RuleFor(x => x.Type).IsInEnum();
-        this.RuleFor(x => x.ClientData).NotNull();
-
-        // Add more rules as needed for client data validation
+        this.RuleFor(x => x.ChannelType).IsInEnum();
+        // Add rules for required delivery/metadata fields based on ChannelType
+        When(x => x.ChannelType == ChannelType.TelegramBot, () =>
+        {
+            this.RuleFor(x => x.TelegramId).NotEmpty();
+            this.RuleFor(x => x.ChatId).NotEmpty();
+        });
+        When(x => x.ChannelType == ChannelType.MobileApp, () =>
+        {
+            this.RuleFor(x => x.DeviceToken).NotEmpty();
+        });
+        When(x => x.ChannelType == ChannelType.WebApp, () =>
+        {
+            this.RuleFor(x => x.SessionId).NotEmpty();
+        });
     }
 }

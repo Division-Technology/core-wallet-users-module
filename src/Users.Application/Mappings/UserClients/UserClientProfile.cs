@@ -8,12 +8,14 @@ namespace Users.Application.Mappings.UserClients
     using Users.Data.Tables;
     using Users.Domain.Entities.UserClients.Commands.Create;
     using Users.Domain.Entities.UserClients.Queries.GetById;
+    using Users.Domain.Entities.UserClients.Queries.GetByUser;
 
     public class UserClientProfile : Profile
     {
         public UserClientProfile()
         {
             this.CreateMap<UserClient, GetUserClientByIdQueryResponse>();
+            this.CreateMap<UserClient, UserClientDto>();
             this.CreateMap<CreateUserClientCommand, UserClient>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())

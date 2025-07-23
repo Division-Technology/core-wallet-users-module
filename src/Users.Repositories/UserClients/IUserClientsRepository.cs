@@ -17,7 +17,7 @@ public interface IUserClientsRepository
 
     Task<IEnumerable<UserClient>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
 
-    Task<UserClient?> GetByUserIdAndTypeAsync(Guid userId, ClientType type, CancellationToken cancellationToken = default);
+    Task<UserClient?> GetByUserIdAndTypeAsync(Guid userId, ChannelType type, CancellationToken cancellationToken = default);
 
     Task<UserClient?> GetByTelegramIdAsync(string telegramId, CancellationToken cancellationToken = default);
 
@@ -28,6 +28,4 @@ public interface IUserClientsRepository
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 
     Task<IEnumerable<UserClient>> GetAllAsync(CancellationToken cancellationToken = default);
-
-    // Add more flexible query methods as needed
 }

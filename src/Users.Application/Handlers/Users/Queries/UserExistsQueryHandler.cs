@@ -69,17 +69,11 @@ public class UserExistsQueryHandler : IRequestHandler<UserExistsQuery, UserExist
         // Check by ChatId (via UserClients)
         if (!string.IsNullOrEmpty(request.ChatId))
         {
-            var clients = await this.clientsRepository.GetAllAsync(cancellationToken);
-            foreach (var client in clients)
+            var client = (await this.clientsRepository.GetAllAsync(cancellationToken))
+                .FirstOrDefault(c => c.ChatId == request.ChatId);
+            if (client != null)
             {
-                if (client.ClientData != null)
-                {
-                    using var doc = JsonDocument.Parse(client.ClientData);
-                    if (doc.RootElement.TryGetProperty("chatId", out var cid) && cid.GetString() == request.ChatId)
-                    {
-                        return new UserExistsQueryResponse { Exists = true, FoundBy = "ChatId" };
-                    }
-                }
+                return new UserExistsQueryResponse { Exists = true, FoundBy = "ChatId" };
             }
         }
 

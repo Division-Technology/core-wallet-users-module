@@ -5,14 +5,23 @@ option go_package = "./;userclients";
 
 package userclients;
 
+enum ChannelType {
+  TELEGRAM_BOT = 0;
+  MOBILE_APP = 1;
+  WEB_APP = 2;
+}
+
 // UserClient messages
 message CreateUserClientRequest {
   string user_id = 1;
-  string client_id = 2;
-  string device_id = 3;
-  string platform = 4;
-  string language = 5;
-  string version = 6;
+  ChannelType channel_type = 2;
+  string telegram_id = 3;
+  string chat_id = 4;
+  string device_token = 5;
+  string session_id = 6;
+  string platform = 7;
+  string version = 8;
+  string language = 9;
 }
 
 message UpdateClientLastSeenRequest {
@@ -24,14 +33,17 @@ message UpdateClientLastSeenRequest {
 message UserClientResponse {
   string id = 1;
   string user_id = 2;
-  string client_id = 3;
-  string device_id = 4;
-  string platform = 5;
-  string language = 6;
-  string version = 7;
-  string created_at = 8;
-  string last_seen_at = 9;
-  bool is_active = 10;
+  ChannelType channel_type = 3;
+  string telegram_id = 4;
+  string chat_id = 5;
+  string device_token = 6;
+  string session_id = 7;
+  string platform = 8;
+  string version = 9;
+  string language = 10;
+  bool is_active = 11;
+  string created_at = 12;
+  string last_seen_at = 13;
 }
 
 message UserClientSuccessResponse {
@@ -67,6 +79,10 @@ message PatchUpdateUserClientRequest {
   string language = 5;
   string version = 6;
   string last_seen_at = 7;
+  string telegram_id = 8;
+  string chat_id = 9;
+  string device_token = 10;
+  string session_id = 11;
 }
 
 // Service definition

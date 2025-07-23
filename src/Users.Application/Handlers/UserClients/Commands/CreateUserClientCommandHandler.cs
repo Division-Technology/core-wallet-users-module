@@ -27,11 +27,16 @@ public class CreateUserClientCommandHandler : IRequestHandler<CreateUserClientCo
     public async Task<CreateUserClientCommandResponse> Handle(CreateUserClientCommand request, CancellationToken cancellationToken)
     {
         // Upsert logic: check if exists by UserId+Type, else create
-        var existing = await this.repository.GetByUserIdAndTypeAsync(request.UserId, request.Type, cancellationToken);
+        var existing = await this.repository.GetByUserIdAndTypeAsync(request.UserId, request.ChannelType, cancellationToken);
         if (existing != null)
         {
-            // Update ClientData, LastSeenAt, etc.
-            existing.ClientData = request.ClientData;
+            existing.TelegramId = request.TelegramId;
+            existing.ChatId = request.ChatId;
+            existing.DeviceToken = request.DeviceToken;
+            existing.SessionId = request.SessionId;
+            existing.Platform = request.Platform;
+            existing.Version = request.Version;
+            existing.Language = request.Language;
             existing.LastSeenAt = DateTime.UtcNow;
             this.repository.Update(existing);
             await this.repository.SaveChangesAsync(cancellationToken);

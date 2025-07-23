@@ -35,8 +35,5 @@ public static class UserClientsInstallment
         builder.Services.AddTransient<IRequestHandler<GetUserClientsQuery, GetUserClientsQueryResponse>, GetUserClientsQueryHandler>();
         builder.Services.AddTransient<IRequestHandler<GetActiveUserClientsQuery, GetActiveUserClientsQueryResponse>, GetActiveUserClientsQueryHandler>();
         builder.Services.AddScoped<IUserClientsRepository, UserClientsRepository>();
-
-        // Register AutoMapper profile if needed
-        // builder.Services.AddAutoMapper(typeof(UserClientProfile).Assembly);
     }
 }

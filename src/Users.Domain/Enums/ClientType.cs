@@ -4,10 +4,9 @@
 
 namespace Users.Domain.Enums;
 
-public enum ClientType
+public enum ChannelType
 {
-    Telegram,
-    MobileApp,
-    WebApp,
-    FlutterApp,
+    TelegramBot = 0,
+    MobileApp = 1,
+    WebApp = 2
 }
