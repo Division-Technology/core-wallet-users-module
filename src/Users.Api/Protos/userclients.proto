@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+option csharp_namespace = "Users.Api.Grpc";
+option go_package = "./;userclients";
+
+package userclients;
+
+// UserClient messages
+message CreateUserClientRequest {
+  string user_id = 1;
+  string client_id = 2;
+  string device_id = 3;
+  string platform = 4;
+  string language = 5;
+  string version = 6;
+}
+
+message UpdateClientLastSeenRequest {
+  string client_id = 1;
+  string last_seen_at = 2;
+}
+
+// Response messages
+message UserClientResponse {
+  string id = 1;
+  string user_id = 2;
+  string client_id = 3;
+  string device_id = 4;
+  string platform = 5;
+  string language = 6;
+  string version = 7;
+  string created_at = 8;
+  string last_seen_at = 9;
+  bool is_active = 10;
+}
+
+message UserClientSuccessResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetUserClientByIdRequest {
+  string id = 1;
+}
+
+message GetUserClientByTelegramIdRequest {
+  string telegram_id = 1;
+}
+
+message GetUserClientsRequest {
+  string user_id = 1;
+}
+
+message GetActiveUserClientsRequest {
+  string user_id = 1;
+}
+
+message UserClientsResponse {
+  repeated UserClientResponse clients = 1;
+}
+
+message PatchUpdateUserClientRequest {
+  string id = 1;
+  bool is_active = 2;
+  bool is_blocked = 3;
+  string platform = 4;
+  string language = 5;
+  string version = 6;
+  string last_seen_at = 7;
+}
+
+// Service definition
+service UserClientsService {
+  rpc CreateClient (CreateUserClientRequest) returns (UserClientResponse);
+  rpc UpdateClientLastSeen (UpdateClientLastSeenRequest) returns (UserClientSuccessResponse);
+  rpc GetById (GetUserClientByIdRequest) returns (UserClientResponse);
+  rpc GetByTelegramId (GetUserClientByTelegramIdRequest) returns (UserClientResponse);
+  rpc GetByUser (GetUserClientsRequest) returns (UserClientsResponse);
+  rpc GetActiveByUser (GetActiveUserClientsRequest) returns (UserClientsResponse);
+  rpc PatchUpdate (PatchUpdateUserClientRequest) returns (UserClientSuccessResponse);
+} 
