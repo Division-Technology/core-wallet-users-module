@@ -20,6 +20,8 @@ using Users.Domain.Entities.Users.Queries.GetById;
 using Users.Grpc;
 using Users.Installment.Common;
 using Users.Installment.Domains;
+using AutoMapper;
+using Users.Application.Mappings.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,9 +66,14 @@ builder.Services.AddMediatR(cfg =>
 // Register Users and UserClients Installments
 builder.InstallUsers();
 
-// Register AutoMapper profiles for both Users and UserClients
-builder.Services.AddAutoMapper(
-    typeof(Users.Application.Mappings.Users.UserProfile).Assembly);
+// Manual AutoMapper registration
+var mapperConfig = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile<UserProfile>();
+    // Add other profiles as needed
+});
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 // builder.InstallCommon();
 // builder.InstallUsers();

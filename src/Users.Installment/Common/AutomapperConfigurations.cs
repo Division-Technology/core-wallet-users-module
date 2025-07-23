@@ -9,7 +9,7 @@ namespace Users.Installment.Common;
 
 public static class AutomapperConfigurations
 {
-    public static MapperConfiguration GetConfigurations => new (cfg =>
+    public static MapperConfiguration GetConfigurations => new MapperConfiguration(cfg =>
     {
         cfg.AddProfile<UserProfile>();
     });

@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Users.Application.Handlers.Users.Commands;
 using Users.Application.Handlers.Users.Queries;
 using Users.Application.Handlers.Users.Queries.GetReferrer;
-using Users.Application.Handlers.Users.Queries.GetRegistrationStatus;
+using Users.Application.Handlers.Users.Queries.GetUserRegistrationStatus;
 using Users.Application.Handlers.Users.Queries.GetUser;
 using Users.Application.Mappings.Users;
 using Users.Domain.Entities.Users.Commands.Create;
@@ -27,7 +27,7 @@ public static class UsersInstallment
             MediatR.IRequestHandler<
                 Users.Domain.Entities.Users.Queries.GetRegistrationStatus.GetUserRegistrationStatusQuery,
                 Users.Domain.Entities.Users.Queries.GetRegistrationStatus.GetUserRegistrationStatusQueryResponse>,
-            Users.Application.Handlers.Users.Queries.GetRegistrationStatus.GetUserRegistrationStatusQueryHandler>();
+            Users.Application.Handlers.Users.Queries.GetUserRegistrationStatus.GetUserRegistrationStatusQueryHandler>();
         builder.Services.AddTransient<IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>, CreateUserCommandHandler>();
         builder.Services.AddTransient<IRequestHandler<PatchUpdateUserCommand, PatchUpdateUserCommandResponse>, PatchUpdateUserCommandHandler>();
         builder.Services.AddScoped<IUsersRepository, UsersRepository>();

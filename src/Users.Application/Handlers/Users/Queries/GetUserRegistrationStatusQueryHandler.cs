@@ -9,7 +9,7 @@ using Users.Application.Exceptions;
 using Users.Domain.Entities.Users.Queries.GetRegistrationStatus;
 using Users.Repositories.Users;
 
-namespace Users.Application.Handlers.Users.Queries.GetRegistrationStatus;
+namespace Users.Application.Handlers.Users.Queries.GetUserRegistrationStatus;
 
 public class GetUserRegistrationStatusQueryHandler : IRequestHandler<GetUserRegistrationStatusQuery, GetUserRegistrationStatusQueryResponse>
 {
