@@ -1,0 +1,54 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  solution: '**/Users.sln'
+
+stages:
+- stage: BuildAndStaticAnalysis
+  displayName: 'Build & Static Analysis'
+  jobs:
+  - job: Build
+    displayName: 'Restore, Build, Static Analysis'
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '8.0.x'
+
+    - script: dotnet restore $(solution)
+      displayName: 'Restore NuGet packages'
+
+    # Build with .NET Analyzers
+    - script: dotnet build $(solution) --configuration $(buildConfiguration) --no-restore -warnaserror
+      displayName: 'Build Solution with Analyzers'
+
+    # dotnet format for code style/formatting
+    - script: dotnet tool install -g dotnet-format
+      displayName: 'Install dotnet-format'
+    - script: dotnet format --verify-no-changes
+      displayName: 'Check Code Formatting'
+
+    # Roslynator CLI
+    - script: dotnet tool install -g roslynator.dotnet.cli
+      displayName: 'Install Roslynator CLI'
+    - script: roslynator analyze $(solution)
+      displayName: 'Run Roslynator Analysis'
+
+- stage: Tests
+  displayName: 'Tests: Unit | Integration'
+  dependsOn: BuildAndStaticAnalysis
+  jobs:
+  - job: RunTests
+    displayName: 'Run All Tests'
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '8.0.x'
+    - script: dotnet test $(solution) --configuration $(buildConfiguration) --no-build --verbosity normal
+      displayName: 'Run Unit and Integration Tests'

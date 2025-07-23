@@ -1,0 +1,33 @@
+services:
+  users-api:
+    container_name: users-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"    # HTTP
+      # - "5001:5001"  # HTTPS (commented out)
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=usersdb;Username=postgres;Password=YourStrong@Password
+    depends_on:
+      - postgres-db
+    networks:
+      - users-network
+
+  postgres-db:
+    container_name: postgres-db
+    image: postgres:15
+    environment:
+      POSTGRES_DB: usersdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: YourStrong@Password
+    ports:
+      - "5432:5432"
+    networks:
+      - users-network
+
+networks:
+  users-network:
+    driver: bridge
