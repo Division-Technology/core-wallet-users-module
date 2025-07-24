@@ -86,7 +86,7 @@ namespace Users.UnitTests.Handlers.Users.Queries
         public async Task Handle_ShouldReturnNotExists_WhenUserNotFound()
         {
             // Arrange
-            _repoMock.Setup(r => r.GetAsync(It.IsAny<System.Func<User, bool>>(), It.IsAny<CancellationToken>())).ReturnsAsync((User)null);
+            _repoMock.Setup(r => r.GetAsync(It.IsAny<System.Func<User, bool>>(), It.IsAny<CancellationToken>())).ReturnsAsync((User?)null);
 
             // Act
             var result = await _handler.Handle(new UserExistsQuery(null, null, null, null), CancellationToken.None);
@@ -99,8 +99,10 @@ namespace Users.UnitTests.Handlers.Users.Queries
         [Fact]
         public async Task Handle_ShouldThrow_WhenRepositoryThrows()
         {
-            _repoMock.Setup(r => r.GetAsync(It.IsAny<System.Func<User, bool>>(), It.IsAny<CancellationToken>())).ThrowsAsync(new Exception("DB error"));
-            await Assert.ThrowsAsync<Exception>(() => _handler.Handle(new UserExistsQuery(null, null, null, null), CancellationToken.None));
+            var handler = new UserExistsQueryHandler(_repoMock.Object);
+            _repoMock.Setup(r => r.GetAsync(It.IsAny<Func<User, bool>>(), It.IsAny<CancellationToken>())).ThrowsAsync(new Exception());
+            var query = new UserExistsQuery(userId: Guid.NewGuid().ToString(), phoneNumber: string.Empty, chatId: string.Empty, telegramId: string.Empty);
+            await Assert.ThrowsAsync<Exception>(() => handler.Handle(query, CancellationToken.None));
         }
     }
 } 

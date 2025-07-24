@@ -12,7 +12,7 @@ public class ListUsersQueryResponse
 {
     public int TotalCount { get; set; }
 
-    public List<UserListItemDto> Users { get; set; } = new ();
+    public List<UserListItemDto> Users { get; set; } = new();
 }
 
 public class UserListItemDto
@@ -27,11 +27,9 @@ public class UserListItemDto
 
     public RegistrationStatus RegistrationStatus { get; set; }
 
-    public bool IsBlock { get; set; }
-
-    public bool IsAdmin { get; set; }
-
     public bool HasVehicle { get; set; }
+
+    public bool IsBlocked { get; set; }
 
     public DateTime CreatedAt { get; set; }
 }

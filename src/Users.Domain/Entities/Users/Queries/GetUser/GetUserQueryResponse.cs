@@ -19,7 +19,7 @@ public class GetUserQueryResponse
 
     public string? Language { get; set; }
 
-    public bool IsBlocked { get; set; } // Renamed from IsBlock
+    public bool IsBlocked { get; set; }
 
     public bool HasVehicle { get; set; }
 

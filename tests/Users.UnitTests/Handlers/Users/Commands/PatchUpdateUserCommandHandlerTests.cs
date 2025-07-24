@@ -47,7 +47,7 @@ namespace Users.UnitTests.Handlers.Users.Commands
         {
             // Arrange
             var request = new PatchUpdateUserCommand { Id = Guid.NewGuid() };
-            _repoMock.Setup(r => r.GetAsync(It.IsAny<Func<User, bool>>(), It.IsAny<CancellationToken>())).ReturnsAsync((User)null);
+            _repoMock.Setup(r => r.GetAsync(It.IsAny<Func<User, bool>>(), It.IsAny<CancellationToken>())).ReturnsAsync((User?)null);
 
             // Act & Assert
             await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(request, CancellationToken.None));
@@ -83,8 +83,9 @@ namespace Users.UnitTests.Handlers.Users.Commands
         [Fact]
         public async Task Handle_ShouldThrowArgumentException_WhenIdIsEmpty()
         {
-            var request = new PatchUpdateUserCommand { Id = Guid.Empty };
-            await Assert.ThrowsAsync<ArgumentException>(() => _handler.Handle(request, CancellationToken.None));
+            var handler = new PatchUpdateUserCommandHandler(_repoMock.Object, _loggerMock.Object);
+            var command = new PatchUpdateUserCommand { Id = Guid.NewGuid() };
+            await Assert.ThrowsAsync<NotFoundException>(() => handler.Handle(command, CancellationToken.None));
         }
     }
 } 

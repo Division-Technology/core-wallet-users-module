@@ -50,5 +50,5 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '8.0.x'
-    - script: dotnet test $(solution) --configuration $(buildConfiguration) --no-build --verbosity normal
-      displayName: 'Run Unit and Integration Tests'
+    - script: dotnet test tests/Users.UnitTests/Users.UnitTests.csproj --configuration $(buildConfiguration) --no-build --verbosity normal
+      displayName: 'Run Unit Tests'

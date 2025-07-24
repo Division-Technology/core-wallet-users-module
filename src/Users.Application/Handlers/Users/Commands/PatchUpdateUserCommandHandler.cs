@@ -29,30 +29,65 @@ public class PatchUpdateUserCommandHandler : IRequestHandler<PatchUpdateUserComm
     /// <inheritdoc/>
     public async Task<PatchUpdateUserCommandResponse> Handle(PatchUpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await this.repository.GetAsync(x => x.Id == request.Id, cancellationToken)
-            ?? throw new NotFoundException($"User with Id {request.Id} not found.");
+        if (!request.Id.HasValue)
+        {
+            throw new BadRequestException("User ID is required for patch update.");
+        }
+
+        var user = await this.repository.GetAsync(x => x.Id == request.Id.Value, cancellationToken)
+            ?? throw new NotFoundException($"User with Id {request.Id.Value} not found.");
 
         var hasChanges = false;
-        if (request.FirstName != null && request.FirstName != user.FirstName) { user.FirstName = request.FirstName;
-            hasChanges = true; }
-        if (request.LastName != null && request.LastName != user.LastName) { user.LastName = request.LastName;
-            hasChanges = true; }
-        if (request.Language != null && request.Language != user.Language) { user.Language = request.Language;
-            hasChanges = true; }
-        if (request.PhoneNumber != null && request.PhoneNumber != user.PhoneNumber) { user.PhoneNumber = request.PhoneNumber;
-            hasChanges = true; }
-        if (request.RegistrationStatus.HasValue && request.RegistrationStatus.Value != user.RegistrationStatus) { user.RegistrationStatus = request.RegistrationStatus.Value;
-            hasChanges = true; }
-        if (request.IsBlocked.HasValue && request.IsBlocked.Value != user.IsBlocked) { user.IsBlocked = request.IsBlocked.Value;
-            hasChanges = true; }
-        if (request.HasVehicle.HasValue && request.HasVehicle.Value != user.HasVehicle) { user.HasVehicle = request.HasVehicle.Value;
-            hasChanges = true; }
-        if (request.TelegramId.HasValue && request.TelegramId.Value != user.TelegramId) { user.TelegramId = request.TelegramId.Value;
-            hasChanges = true; }
-        if (request.ChatId.HasValue && request.ChatId.Value != user.ChatId) { user.ChatId = request.ChatId.Value;
-            hasChanges = true; }
-        if (request.Username != null && request.Username != user.Username) { user.Username = request.Username;
-            hasChanges = true; }
+        if (request.FirstName != null && request.FirstName != user.FirstName)
+        {
+            user.FirstName = request.FirstName;
+            hasChanges = true;
+        }
+        if (request.LastName != null && request.LastName != user.LastName)
+        {
+            user.LastName = request.LastName;
+            hasChanges = true;
+        }
+        if (request.Language != null && request.Language != user.Language)
+        {
+            user.Language = request.Language;
+            hasChanges = true;
+        }
+        if (request.PhoneNumber != null && request.PhoneNumber != user.PhoneNumber)
+        {
+            user.PhoneNumber = request.PhoneNumber;
+            hasChanges = true;
+        }
+        if (request.RegistrationStatus.HasValue && request.RegistrationStatus.Value != user.RegistrationStatus)
+        {
+            user.RegistrationStatus = request.RegistrationStatus.Value;
+            hasChanges = true;
+        }
+        if (request.IsBlocked.HasValue && request.IsBlocked.Value != user.IsBlocked)
+        {
+            user.IsBlocked = request.IsBlocked.Value;
+            hasChanges = true;
+        }
+        if (request.HasVehicle.HasValue && request.HasVehicle.Value != user.HasVehicle)
+        {
+            user.HasVehicle = request.HasVehicle.Value;
+            hasChanges = true;
+        }
+        if (request.TelegramId.HasValue && request.TelegramId.Value != user.TelegramId)
+        {
+            user.TelegramId = request.TelegramId.Value;
+            hasChanges = true;
+        }
+        if (request.ChatId.HasValue && request.ChatId.Value != user.ChatId)
+        {
+            user.ChatId = request.ChatId.Value;
+            hasChanges = true;
+        }
+        if (request.Username != null && request.Username != user.Username)
+        {
+            user.Username = request.Username;
+            hasChanges = true;
+        }
         if (hasChanges)
         {
             await this.repository.SaveChangesAsync(cancellationToken);
@@ -73,8 +108,8 @@ public class PatchUpdateUserCommandHandler : IRequestHandler<PatchUpdateUserComm
             _ when propertyInfo.PropertyType == typeof(bool) => jsonElement.GetBoolean(),
             _ when propertyInfo.PropertyType == typeof(Guid?) => jsonElement.ValueKind == JsonValueKind.Null
                 ? null
-                : Guid.Parse(jsonElement.GetString() !),
-            _ when propertyInfo.PropertyType == typeof(string) => jsonElement.GetString() !,
+                : Guid.Parse(jsonElement.GetString()!),
+            _ when propertyInfo.PropertyType == typeof(string) => jsonElement.GetString()!,
             _ => throw new InvalidOperationException(
                 $"Unsupported type {propertyInfo.PropertyType.Name} for field {propertyInfo.Name}")
         };

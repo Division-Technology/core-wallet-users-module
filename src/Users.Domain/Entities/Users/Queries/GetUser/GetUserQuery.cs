@@ -13,5 +13,9 @@ public class GetUserQuery : IRequest<GetUserQueryResponse>
 
     public string? PhoneNumber { get; set; }
 
+    public long? TelegramId { get; set; }
+
+    public long? ChatId { get; set; }
+
     // Add other identifiers as needed (e.g., email, etc.)
 }

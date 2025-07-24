@@ -19,17 +19,7 @@ public class GetUserByIdQueryResponse
 
     public string? PhoneNumber { get; set; }
 
-    public Guid? Referrer { get; set; }
-
     public RegistrationStatus RegistrationStatus { get; set; }
-
-    public bool IsBlock { get; set; }
-
-    public bool IsAdmin { get; set; }
-
-    public bool IsSuspicious { get; set; }
-
-    public bool IsPremium { get; set; }
 
     public bool HasVehicle { get; set; }
 

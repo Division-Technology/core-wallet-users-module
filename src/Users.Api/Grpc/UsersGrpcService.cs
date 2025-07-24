@@ -8,10 +8,14 @@ using MediatR;
 using Users.Api.Grpc;
 using Users.Domain.Entities.Users.Commands.Create;
 using Users.Domain.Entities.Users.Commands.PatchUpdate;
+using Users.Domain.Entities.Users.Commands.SetLanguage;
+using Users.Domain.Entities.Users.Commands.SetPhoneNumber;
+using Users.Domain.Entities.Users.Commands.SetBlocked;
+using Users.Domain.Entities.Users.Commands.SetHasVehicle;
 using Users.Domain.Entities.Users.Queries.Exists;
+using Users.Domain.Entities.Users.Queries.CheckHasVehicle;
 using Users.Domain.Entities.Users.Queries.GetById;
 using Users.Domain.Entities.Users.Queries.GetByPhone;
-using Users.Domain.Entities.Users.Queries.GetReferrer;
 using Users.Domain.Entities.Users.Queries.GetRegistrationStatus;
 using Users.Domain.Entities.Users.Queries.ListUsers;
 using Users.Domain.Enums;
@@ -90,19 +94,39 @@ public class UsersGrpcService : UsersService.UsersServiceBase
     }
 
     /// <inheritdoc/>
+    public override async Task<CheckUserHasVehicleResponse> CheckHasVehicle(CheckUserHasVehicleRequest request, ServerCallContext context)
+    {
+        Guid? userId = null;
+        long? telegramId = null;
+        
+        if (!string.IsNullOrEmpty(request.UserId))
+        {
+            userId = Guid.Parse(request.UserId);
+        }
+        
+        if (!string.IsNullOrEmpty(request.TelegramId))
+        {
+            telegramId = long.Parse(request.TelegramId);
+        }
+        
+        var query = new CheckUserHasVehicleQuery(userId, telegramId);
+        var result = await this.mediator.Send(query);
+        
+        return new CheckUserHasVehicleResponse
+        {
+            HasVehicle = result.HasVehicle,
+            UserExists = result.UserExists,
+            UserId = result.UserId?.ToString() ?? string.Empty,
+            FoundBy = result.FoundBy
+        };
+    }
+
+    /// <inheritdoc/>
     public override async Task<GetUserRegistrationStatusResponse> GetRegistrationStatus(GetUserRegistrationStatusRequest request, ServerCallContext context)
     {
         var query = new GetUserRegistrationStatusQuery { UserId = Guid.Parse(request.UserId) };
         var result = await this.mediator.Send(query);
         return new GetUserRegistrationStatusResponse { Status = result.RegistrationStatus.ToString() };
-    }
-
-    /// <inheritdoc/>
-    public override async Task<GetReferrerResponse> GetReferrer(GetReferrerRequest request, ServerCallContext context)
-    {
-        var query = new GetReferrerQuery { UserId = Guid.Parse(request.UserId) };
-        var result = await this.mediator.Send(query);
-        return new GetReferrerResponse { ReferrerId = result.ReferrerId?.ToString() ?? string.Empty };
     }
 
     /// <inheritdoc/>
@@ -119,7 +143,7 @@ public class UsersGrpcService : UsersService.UsersServiceBase
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 PhoneNumber = u.PhoneNumber ?? string.Empty,
-                IsBlocked = u.IsBlock,
+                IsBlocked = u.IsBlocked,
                 HasVehicle = u.HasVehicle,
                 CreatedAt = u.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"),
 
@@ -140,10 +164,62 @@ public class UsersGrpcService : UsersService.UsersServiceBase
             LastName = request.LastName,
             Language = request.Language,
             PhoneNumber = request.PhoneNumber,
-            IsBlocked = request.IsBlocked, // Map is_blocked to IsBlock
+            IsBlocked = request.IsBlocked,
             HasVehicle = request.HasVehicle,
         };
         var result = await this.mediator.Send(command);
+        return new SuccessResponse { Success = result.Success, Message = result.Message };
+    }
+
+    /// <inheritdoc/>
+    public override async Task<SuccessResponse> SetLanguage(SetUserLanguageRequest request, ServerCallContext context)
+    {
+        var command = new SetUserLanguageCommand
+        {
+            UserId = !string.IsNullOrEmpty(request.Id) ? Guid.Parse(request.Id) : null,
+            Language = request.Language
+        };
+        
+        var result = await mediator.Send(command);
+        return new SuccessResponse { Success = result.Success, Message = result.Message };
+    }
+
+    /// <inheritdoc/>
+    public override async Task<SuccessResponse> SetPhoneNumber(SetUserPhoneNumberRequest request, ServerCallContext context)
+    {
+        var command = new SetUserPhoneNumberCommand
+        {
+            UserId = !string.IsNullOrEmpty(request.Id) ? Guid.Parse(request.Id) : null,
+            NewPhoneNumber = request.NewPhoneNumber
+        };
+        
+        var result = await mediator.Send(command);
+        return new SuccessResponse { Success = result.Success, Message = result.Message };
+    }
+
+    /// <inheritdoc/>
+    public override async Task<SuccessResponse> SetBlocked(SetUserBlockedRequest request, ServerCallContext context)
+    {
+        var command = new SetUserBlockedCommand
+        {
+            UserId = !string.IsNullOrEmpty(request.Id) ? Guid.Parse(request.Id) : null,
+            IsBlocked = request.IsBlocked
+        };
+        
+        var result = await mediator.Send(command);
+        return new SuccessResponse { Success = result.Success, Message = result.Message };
+    }
+
+    /// <inheritdoc/>
+    public override async Task<SuccessResponse> SetHasVehicle(SetUserHasVehicleRequest request, ServerCallContext context)
+    {
+        var command = new SetUserHasVehicleCommand
+        {
+            UserId = !string.IsNullOrEmpty(request.Id) ? Guid.Parse(request.Id) : null,
+            HasVehicle = request.HasVehicle
+        };
+        
+        var result = await mediator.Send(command);
         return new SuccessResponse { Success = result.Success, Message = result.Message };
     }
 

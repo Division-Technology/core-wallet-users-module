@@ -9,6 +9,7 @@ using MediatR;
 using Users.Application.Exceptions;
 using Users.Domain.Entities.Users.Queries.GetUser;
 using Users.Repositories.Users;
+using Users.Data.Tables;
 
 namespace Users.Application.Handlers.Users.Queries.GetUser;
 
@@ -26,11 +27,26 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserQueryRes
     /// <inheritdoc/>
     public async Task<GetUserQueryResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
-        var user = request.Id.HasValue
-            ? await this.repository.GetAsync(x => x.Id == request.Id.Value, cancellationToken)
-            : !string.IsNullOrEmpty(request.PhoneNumber)
-                ? await this.repository.GetAsync(x => x.PhoneNumber == request.PhoneNumber, cancellationToken)
-                : null;
+        User? user = null;
+
+        // Try to find user by different identifiers in order of priority
+        if (request.Id.HasValue)
+        {
+            user = await this.repository.GetByIdAsync(request.Id.Value, cancellationToken);
+        }
+        else if (request.TelegramId.HasValue)
+        {
+            user = await this.repository.GetByTelegramIdAsync(request.TelegramId.Value, cancellationToken);
+        }
+        else if (request.ChatId.HasValue)
+        {
+            user = await this.repository.GetByChatIdAsync(request.ChatId.Value, cancellationToken);
+        }
+        else if (!string.IsNullOrEmpty(request.PhoneNumber))
+        {
+            user = await this.repository.GetAsync(x => x.PhoneNumber == request.PhoneNumber, cancellationToken);
+        }
+
         if (user == null)
         {
             throw new NotFoundException("User not found.");

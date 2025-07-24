@@ -19,9 +19,9 @@ public class User : BaseEntity
 
     public string? PhoneNumber { get; set; }
 
-    public RegistrationStatus RegistrationStatus { get; set; } // Profile completion state
+    public RegistrationStatus RegistrationStatus { get; set; }
 
-    public bool IsBlocked { get; set; } // Admin-initiated block (renamed from IsBlock)
+    public bool IsBlocked { get; set; }
 
     public bool HasVehicle { get; set; }
 

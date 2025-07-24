@@ -18,8 +18,7 @@ using Users.Domain.Entities.Users.Commands.Create;
 using Users.Domain.Entities.Users.Commands.PatchUpdate;
 using Users.Domain.Entities.Users.Queries.GetById;
 using Users.Grpc;
-using Users.Installment.Common;
-using Users.Installment.Domains;
+using Users.Api.Common;
 using AutoMapper;
 using Users.Application.Mappings.Users;
 
@@ -63,20 +62,20 @@ builder.Services.AddMediatR(cfg =>
         typeof(Program).Assembly,
         typeof(AssemblyReference).Assembly));
 
-// Register Users and UserClients Installments
-builder.InstallUsers();
+// Register Users and UserClients Data
+builder.Services.AddCommonData(builder.Configuration);
 
-// Manual AutoMapper registration
-var mapperConfig = new MapperConfiguration(cfg =>
-{
-    cfg.AddProfile<UserProfile>();
-    // Add other profiles as needed
-});
-IMapper mapper = mapperConfig.CreateMapper();
-builder.Services.AddSingleton(mapper);
-
-// builder.InstallCommon();
-// builder.InstallUsers();
+// Replace manual AutoMapper registration with DI-based registration
+builder.Services.AddAutoMapper(
+    cfg =>
+    {
+        // set your license here (or pull from configuration)
+        cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"];
+    },
+    // then list the assemblies or marker types to scan
+    typeof(Program).Assembly,
+    typeof(Users.Application.Mappings.Users.UserProfile).Assembly
+);
 
 // --- App ---
 var app = builder.Build();

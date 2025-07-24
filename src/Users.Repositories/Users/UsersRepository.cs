@@ -30,4 +30,16 @@ public class UsersRepository : GenericRepository<User>, IUsersRepository
     {
         return await this.DbContext.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
+    
+    /// <inheritdoc/>
+    public async Task<User?> GetByTelegramIdAsync(long telegramId, CancellationToken cancellationToken = default)
+    {
+        return await this.DbContext.Users.FirstOrDefaultAsync(u => u.TelegramId == telegramId, cancellationToken);
+    }
+    
+    /// <inheritdoc/>
+    public async Task<User?> GetByChatIdAsync(long chatId, CancellationToken cancellationToken = default)
+    {
+        return await this.DbContext.Users.FirstOrDefaultAsync(u => u.ChatId == chatId, cancellationToken);
+    }
 }

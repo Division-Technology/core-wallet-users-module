@@ -27,6 +27,11 @@ public class CreateUserCommandHandler
         CreateUserCommandRequest request,
         CancellationToken cancellationToken)
     {
+        if (request == null)
+            throw new ArgumentNullException(nameof(request));
+        if (string.IsNullOrWhiteSpace(request.FirstName))
+            throw new ArgumentNullException(nameof(request.FirstName));
+
         var user = this.mapper.Map<User>(request);
 
         await this.repository.AddAndSaveAsync(user);

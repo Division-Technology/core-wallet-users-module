@@ -9,7 +9,7 @@ namespace Users.Domain.Entities.Users.Commands.PatchUpdate;
 
 public class PatchUpdateUserCommand : IRequest<PatchUpdateUserCommandResponse>
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
 
     // Profile fields
     public string? FirstName { get; set; }

@@ -61,11 +61,8 @@ namespace Users.UnitTests.Handlers.Users.Commands
         [Fact]
         public async Task Handle_ShouldThrowArgumentNullException_WhenRequestIsNull()
         {
-            // Arrange
-            CreateUserCommandRequest request = null;
-
-            // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(request, CancellationToken.None));
+            var handler = new CreateUserCommandHandler(_repoMock.Object, _mapperMock.Object);
+            await Assert.ThrowsAsync<ArgumentNullException>(() => handler.Handle(null!, CancellationToken.None));
         }
 
         [Fact]
@@ -110,8 +107,9 @@ namespace Users.UnitTests.Handlers.Users.Commands
         [Fact]
         public async Task Handle_ShouldThrowArgumentNullException_WhenFirstNameIsMissing()
         {
-            var request = new CreateUserCommandRequest { LastName = "Doe" };
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(request, CancellationToken.None));
+            var handler = new CreateUserCommandHandler(_repoMock.Object, _mapperMock.Object);
+            var request = new CreateUserCommandRequest { FirstName = null };
+            await Assert.ThrowsAsync<ArgumentNullException>(() => handler.Handle(request, CancellationToken.None));
         }
     }
 } 

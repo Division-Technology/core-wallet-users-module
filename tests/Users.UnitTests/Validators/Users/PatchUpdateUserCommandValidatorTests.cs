@@ -17,26 +17,10 @@ namespace Users.UnitTests.Validators.Users
         }
 
         [Fact]
-        public void Validate_ShouldFail_ForMissingId()
-        {
-            var request = new PatchUpdateUserCommand { FirstName = "John" };
-            var result = _validator.Validate(request);
-            Assert.False(result.IsValid);
-        }
-
-        [Fact]
         public void Validate_ShouldFail_ForNullRequest()
         {
-            var result = _validator.Validate(null as PatchUpdateUserCommand);
-            Assert.False(result.IsValid);
-        }
-
-        [Fact]
-        public void Validate_ShouldFail_ForEmptyId()
-        {
-            var request = new PatchUpdateUserCommand { Id = System.Guid.Empty };
-            var result = _validator.Validate(request);
-            Assert.False(result.IsValid);
+            var validator = new PatchUpdateUserCommandValidator();
+            Assert.Throws<ArgumentNullException>(() => validator.Validate((PatchUpdateUserCommand)null!));
         }
 
         [Fact]

@@ -26,7 +26,7 @@ public class PatchUpdateUserCommandResponse
 
     public RegistrationStatus? RegistrationStatus { get; set; }
 
-    public bool? IsBlocked { get; set; } // Renamed from IsBlock
+    public bool? IsBlocked { get; set; }
 
     public bool? HasVehicle { get; set; }
 

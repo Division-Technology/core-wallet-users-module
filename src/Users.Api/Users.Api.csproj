@@ -8,7 +8,7 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="AutoMapper" Version="15.0.1" />
 		<PackageReference Include="FluentValidation" Version="11.3.0" />
 		<PackageReference Include="Google.Protobuf" Version="3.30.2" />
 		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
@@ -28,6 +28,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.4" />
 		<PackageReference Include="Polly" Version="7.2.3" />
 		<PackageReference Include="System.Text.Json" Version="9.0.4" />
+		<PackageReference Include="MediatR" Version="13.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -36,7 +37,6 @@
 	
 	<ItemGroup>
 		<ProjectReference Include="..\Users.Domain\Users.Domain.csproj" />
-		<ProjectReference Include="..\Users.Installment\Users.Installment.csproj" />
 		<ProjectReference Include="..\Users.Application\Users.Application.csproj" />
 	</ItemGroup>
 

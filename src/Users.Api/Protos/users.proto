@@ -16,10 +16,6 @@ message CreateUserRequest {
   string phone_number = 7;
   string referrer = 8;
   bool is_blocked = 9;
-  bool is_block = 10;
-  bool is_admin = 11;
-  bool is_suspicious = 12;
-  bool is_premium = 13;
   bool has_vehicle = 14;
 }
 
@@ -46,6 +42,11 @@ message UserExistsRequest {
   string user_id = 4;
 }
 
+message CheckUserHasVehicleRequest {
+  string user_id = 1;
+  string telegram_id = 2;
+}
+
 message UpdateUserProfileRequest {
   string id = 1;
   string first_name = 2;
@@ -68,6 +69,11 @@ message SetUserHasVehicleRequest {
 message SetUserLanguageRequest {
   string id = 1;
   string language = 2;
+}
+
+message SetUserPhoneNumberRequest {
+  string id = 1;
+  string new_phone_number = 2;
 }
 
 message SetUserAdminFlagsRequest {
@@ -102,6 +108,13 @@ message UserExistsResponse {
   bool exists = 1;
   string user_id = 2;
   string found_by = 3;
+}
+
+message CheckUserHasVehicleResponse {
+  bool has_vehicle = 1;
+  bool user_exists = 2;
+  string user_id = 3;
+  string found_by = 4;
 }
 
 message SuccessResponse {
@@ -143,9 +156,6 @@ message PatchUpdateUserRequest {
   string phone_number = 5;
   string language = 6;
   bool is_blocked = 7;
-  bool is_admin = 8;
-  bool is_suspicious = 9;
-  bool is_premium = 10;
   bool has_vehicle = 11;
 }
 
@@ -158,13 +168,13 @@ service UsersService {
   rpc GetByPhone (GetUserByPhoneRequest) returns (UserResponse);
   rpc GetByChatId (GetUserByChatIdRequest) returns (UserResponse);
   rpc Exists (UserExistsRequest) returns (UserExistsResponse);
+  rpc CheckHasVehicle (CheckUserHasVehicleRequest) returns (CheckUserHasVehicleResponse);
   rpc UpdateProfile (UpdateUserProfileRequest) returns (SuccessResponse);
   rpc SetBlocked (SetUserBlockedRequest) returns (SuccessResponse);
   rpc SetHasVehicle (SetUserHasVehicleRequest) returns (SuccessResponse);
   rpc SetLanguage (SetUserLanguageRequest) returns (SuccessResponse);
-  rpc SetAdminFlags (SetUserAdminFlagsRequest) returns (SuccessResponse);
+  rpc SetPhoneNumber (SetUserPhoneNumberRequest) returns (SuccessResponse);
   rpc GetRegistrationStatus (GetUserRegistrationStatusRequest) returns (GetUserRegistrationStatusResponse);
-  rpc GetReferrer (GetReferrerRequest) returns (GetReferrerResponse);
   rpc ListUsers (ListUsersRequest) returns (ListUsersResponse);
   rpc PatchUpdate (PatchUpdateUserRequest) returns (SuccessResponse);
 }

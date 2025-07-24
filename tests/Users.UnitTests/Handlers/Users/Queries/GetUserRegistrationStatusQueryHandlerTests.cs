@@ -30,7 +30,8 @@ namespace Users.UnitTests.Handlers.Users.Queries
             _repoMock.Setup(r => r.GetAsync(It.IsAny<Func<User, bool>>(), It.IsAny<CancellationToken>())).ReturnsAsync(user);
 
             // Act
-            var result = await _handler.Handle(new GetUserRegistrationStatusQuery { UserId = user.Id }, CancellationToken.None);
+            var query = new GetUserRegistrationStatusQuery { UserId = Guid.NewGuid() };
+            var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
             Assert.Equal(user.RegistrationStatus, result.RegistrationStatus);
@@ -40,7 +41,7 @@ namespace Users.UnitTests.Handlers.Users.Queries
         public async Task Handle_ShouldThrowNotFoundException_WhenUserNotFound()
         {
             // Arrange
-            _repoMock.Setup(r => r.GetAsync(It.IsAny<Func<User, bool>>(), It.IsAny<CancellationToken>())).ReturnsAsync((User)null);
+            _repoMock.Setup(r => r.GetAsync(It.IsAny<Func<User, bool>>(), It.IsAny<CancellationToken>())).ReturnsAsync((User?)null);
 
             // Act & Assert
             await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(new GetUserRegistrationStatusQuery { UserId = Guid.NewGuid() }, CancellationToken.None));

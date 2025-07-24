@@ -41,8 +41,8 @@ namespace Users.UnitTests.Validators.Users
         [Fact]
         public void Validate_ShouldFail_ForNullRequest()
         {
-            var result = _validator.Validate(null as CreateUserCommandRequest);
-            Assert.False(result.IsValid);
+            var validator = new CreateUserCommandRequestValidator();
+            Assert.Throws<ArgumentNullException>(() => validator.Validate((CreateUserCommandRequest)null!));
         }
 
         [Fact]
